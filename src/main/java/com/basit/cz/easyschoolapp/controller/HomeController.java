@@ -10,8 +10,9 @@ import java.util.List;
 public class HomeController {
 
     @GetMapping({"","/","/home"})
-    public String index(Model model) {
+    public String home(Model model) {
         model.addAttribute("country", List.of("Pakistan","India","Japan","China"));
-        return "home2";
+        return "home";
     }
+
 }
