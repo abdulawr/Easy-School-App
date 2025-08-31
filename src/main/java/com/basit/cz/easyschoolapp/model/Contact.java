@@ -22,5 +22,7 @@ public class Contact {
     @Min(value = 10,message = "Subject should be b/w 10 & 255")
     @Max(value = 255,message = "Subject should be b/w 10 & 255")
     String subject;
+
+    @NotBlank(message = "Message is required")
     String message;
 }
