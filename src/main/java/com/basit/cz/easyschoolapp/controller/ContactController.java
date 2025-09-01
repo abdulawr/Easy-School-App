@@ -25,7 +25,7 @@ public class ContactController {
         return "contact";
     }
 
-    @PostMapping("saveMsg")
+    @PostMapping("/saveMsg")
     public String saveMsg(@Valid @ModelAttribute("contact") Contact contact, Errors errors) {
         if (errors.hasErrors()) {
             log.info("Errors found in contact form => "+errors.toString());

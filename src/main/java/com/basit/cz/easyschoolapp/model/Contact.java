@@ -6,23 +6,23 @@ import lombok.ToString;
 
 @Data
 public class Contact {
-    @NotEmpty(message = "Name shouldn't be empty!")
-    String name;
+    @NotBlank(message="Name must not be blank")
+    @Size(min=3, message="Name must be at least 3 characters long")
+    private String name;
 
-    @NotEmpty(message = "Mobile number is required!")
-    @Size(max = 13, message = "Mobile number cannot be longer than 13 digits")
-    @Pattern(regexp = "^[0-9]*$", message = "Mobile number must contain only digits")
-    String mobileNum;
+    @NotBlank(message="Mobile number must not be blank")
+    @Pattern(regexp="(^$|[0-9]{10})",message = "Mobile number must be 10 digits")
+    private String mobileNum;
 
-    @NotEmpty(message = "Email is required!")
-    @Email(message = "Invalid email address")
-    String email;
+    @NotBlank(message="Email must not be blank")
+    @Email(message = "Please provide a valid email address" )
+    private String email;
 
-    @NotBlank(message = "Subject is required!")
-    @Min(value = 10,message = "Subject should be b/w 10 & 255")
-    @Max(value = 255,message = "Subject should be b/w 10 & 255")
-    String subject;
+    @NotBlank(message="Subject must not be blank")
+    @Size(max=255, message="Subject must be at least 5 characters long")
+    private String subject;
 
-    @NotBlank(message = "Message is required")
-    String message;
+    @NotBlank(message="Message must not be blank")
+    @Size(min=10, message="Message must be at least 10 characters long")
+    private String message;
 }
