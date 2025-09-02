@@ -41,13 +41,15 @@ public class WebSecurityConfig {
         return http.build();
     }
 
+    @Bean
     public InMemoryUserDetailsManager inMemoryUserDetailsManager() {
-        UserDetails user = User.withDefaultPasswordEncoder()
+        User.UserBuilder users = User.withDefaultPasswordEncoder();
+        UserDetails user = users
                 .username("user")
                 .password("12345")
                 .roles("USER")
                 .build();
-        UserDetails admin = User.withDefaultPasswordEncoder()
+        UserDetails admin = users
                 .username("admin")
                 .password("12345")
                 .roles("USER", "ADMIN")
