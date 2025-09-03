@@ -1,6 +1,7 @@
 package com.basit.cz.easyschoolapp.config;
 
 import jakarta.servlet.http.HttpServletResponse;
+import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.jaas.memory.InMemoryConfiguration;
@@ -26,7 +27,10 @@ public class WebSecurityConfig {
                    .requestMatchers("/holidays/**").permitAll()
                    .requestMatchers("/about").permitAll()
                    .requestMatchers("/assets/**").permitAll()
+                   .requestMatchers(PathRequest.toH2Console()).permitAll()
                    .requestMatchers("/dashboard").authenticated()
+                   .requestMatchers("/displayMessages").authenticated()
+                   .requestMatchers("/closeMsg").authenticated()
         ).formLogin(
                 loginConfig ->
                         loginConfig.loginPage("/login")
@@ -38,6 +42,7 @@ public class WebSecurityConfig {
                                 .permitAll()
                 ).httpBasic(Customizer.withDefaults());
 
+       http.headers(header -> header.disable());
         return http.build();
     }
 

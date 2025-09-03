@@ -17,6 +17,7 @@ public class AuthController {
         if (error != null) {
             errorMsg = "Username or Password is incorrect !!";
         }
+
         if (logout != null) {
             errorMsg = "You have been successfully logged out !!";
         }
