@@ -1,11 +1,17 @@
 package com.basit.cz.easyschoolapp.model;
 
+import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 import lombok.Data;
 import lombok.ToString;
 
 @Data
+@Entity
+@Table(name = "contact_msg")
 public class Contact extends BaseEntity {
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name = "contact_id")
     int contactId;
 
     @NotBlank(message="Name must not be blank")

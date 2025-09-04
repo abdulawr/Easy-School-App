@@ -49,8 +49,8 @@ public class ContactController {
     }
 
     @GetMapping("/closeMsg")
-    public String closeMsg(@RequestParam int id, Authentication auth) {
-        contactService.updateMsgStatus(id,auth.getName());
+    public String closeMsg(@RequestParam int id) {
+        contactService.updateMsgStatus(id);
         ModelAndView modelAndView = new ModelAndView("messages.html");
         return "redirect:/displayMessages";
     }

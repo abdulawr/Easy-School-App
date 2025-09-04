@@ -26,8 +26,7 @@ public class WebSecurityConfig {
                    .requestMatchers("/saveMsg").permitAll()
                    .requestMatchers("/holidays/**").permitAll()
                    .requestMatchers("/about").permitAll()
-                   .requestMatchers("/assets/**").permitAll()
-                   .requestMatchers(PathRequest.toH2Console()).permitAll()
+                   .requestMatchers("/assets/**").permitAll() // Allow assets
                    .requestMatchers("/dashboard").authenticated()
                    .requestMatchers("/displayMessages").authenticated()
                    .requestMatchers("/closeMsg").authenticated()

@@ -1,13 +1,19 @@
 package com.basit.cz.easyschoolapp.model;
 
+import jakarta.persistence.*;
 import lombok.Data;
 
 @Data
+@Entity
+@Table(name = "holidays")
 public class Holiday {
 
-    private final String day;
-    private final String reason;
-    private final Type type;
+    @Id
+    private String day;
+    private String reason;
+
+    @Enumerated(EnumType.STRING)
+    private Type type;
 
     public enum Type {
         FESTIVAL, FEDERAL
