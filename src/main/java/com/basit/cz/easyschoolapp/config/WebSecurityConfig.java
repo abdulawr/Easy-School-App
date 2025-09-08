@@ -17,19 +17,21 @@ public class WebSecurityConfig {
 
     @Bean
     public SecurityFilterChain web(HttpSecurity http) throws Exception {
-
-        http.csrf((csrf) -> csrf.disable())
+        http.csrf((csrf) ->
+                        csrf.ignoringRequestMatchers("/saveMsg").
+                                ignoringRequestMatchers("/public/**"))
                 .authorizeHttpRequests((authorize) ->
-           authorize.requestMatchers("/contact").permitAll()
+                    authorize.requestMatchers("/contact").permitAll()
+                   .requestMatchers("/public/**").permitAll()
                    .requestMatchers("/","/home").permitAll()
                    .requestMatchers("/courses").permitAll()
                    .requestMatchers("/saveMsg").permitAll()
                    .requestMatchers("/holidays/**").permitAll()
                    .requestMatchers("/about").permitAll()
                    .requestMatchers("/assets/**").permitAll() // Allow assets
-                   .requestMatchers("/dashboard").authenticated()
-                   .requestMatchers("/displayMessages").authenticated()
-                   .requestMatchers("/closeMsg").authenticated()
+                   .requestMatchers("/dashboard").hasRole("ADMIN")
+                   .requestMatchers("/displayMessages").hasRole("ADMIN")
+                    .requestMatchers("/closeMsg/**").hasRole("ADMIN")
         ).formLogin(
                 loginConfig ->
                         loginConfig.loginPage("/login")
