@@ -1,66 +1,71 @@
 package com.basit.cz.easyschoolapp.config;
 
-import jakarta.servlet.http.HttpServletResponse;
-import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
+import com.basit.cz.easyschoolapp.security.CustomUsernameAndPwdAuth;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.authentication.jaas.memory.InMemoryConfiguration;
+import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.core.userdetails.User;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.provisioning.InMemoryUserDetailsManager;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.NoOpPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+
 
 @Configuration
 public class WebSecurityConfig {
 
+    @Autowired
+    CustomUsernameAndPwdAuth customUsernameAndPwdAuth;
+
     @Bean
     public SecurityFilterChain web(HttpSecurity http) throws Exception {
-        http.csrf((csrf) ->
-                        csrf.ignoringRequestMatchers("/saveMsg").
-                                ignoringRequestMatchers("/public/**"))
-                .authorizeHttpRequests((authorize) ->
-                    authorize.requestMatchers("/contact").permitAll()
-                   .requestMatchers("/public/**").permitAll()
-                   .requestMatchers("/","/home").permitAll()
-                   .requestMatchers("/courses").permitAll()
-                   .requestMatchers("/saveMsg").permitAll()
-                   .requestMatchers("/holidays/**").permitAll()
-                   .requestMatchers("/about").permitAll()
-                   .requestMatchers("/assets/**").permitAll() // Allow assets
-                   .requestMatchers("/dashboard").hasRole("ADMIN")
-                   .requestMatchers("/displayMessages").hasRole("ADMIN")
-                    .requestMatchers("/closeMsg/**").hasRole("ADMIN")
-        ).formLogin(
-                loginConfig ->
-                        loginConfig.loginPage("/login")
-                        .defaultSuccessUrl("/dashboard").failureUrl("/login?error=true")
-                        .permitAll()
-                ).logout(logoutConfig ->
-                        logoutConfig.logoutSuccessUrl("/login?logout=true")
-                                .invalidateHttpSession(true)
-                                .permitAll()
-                ).httpBasic(Customizer.withDefaults());
 
-       http.headers(header -> header.disable());
+        http.csrf((csrf) -> csrf.ignoringRequestMatchers("/saveMsg").ignoringRequestMatchers("/public/**"))
+                .authorizeHttpRequests((requests) -> requests.requestMatchers("/dashboard").authenticated()
+                        .requestMatchers("/displayMessages").hasRole("ADMIN")
+                        .requestMatchers("/closeMsg/**").hasRole("ADMIN")
+                        .requestMatchers("/", "/home").permitAll()
+                        .requestMatchers("/holidays/**").permitAll()
+                        .requestMatchers("/contact").permitAll()
+                        .requestMatchers("/saveMsg").permitAll()
+                        .requestMatchers("/courses").permitAll()
+                        .requestMatchers("/about").permitAll()
+                        .requestMatchers("/assets/**").permitAll()
+                        .requestMatchers("/login").permitAll()
+                        .requestMatchers("/logout").permitAll()
+                        .requestMatchers("/displayProfile").permitAll()
+                        .requestMatchers("/public/**").permitAll())
+                        .authenticationProvider(customUsernameAndPwdAuth)
+                .formLogin(loginConfigurer -> loginConfigurer.loginPage("/login")
+                        .defaultSuccessUrl("/dashboard").failureUrl("/login?error=true").permitAll())
+                .logout(logoutConfigurer -> logoutConfigurer.logoutSuccessUrl("/login?logout=true")
+                        .invalidateHttpSession(true)
+                        .clearAuthentication(true)
+                        .deleteCookies("JSESSIONID").permitAll())
+                .httpBasic(Customizer.withDefaults());
+
+       //http.headers(header -> header.disable());
         return http.build();
     }
 
-    @Bean
-    public InMemoryUserDetailsManager inMemoryUserDetailsManager() {
-        User.UserBuilder users = User.withDefaultPasswordEncoder();
-        UserDetails user = users
-                .username("user")
-                .password("12345")
-                .roles("USER")
-                .build();
-        UserDetails admin = users
-                .username("admin")
-                .password("12345")
-                .roles("USER", "ADMIN")
-                .build();
-        return new InMemoryUserDetailsManager(user, admin);
-    }
+//    @Bean
+//    public InMemoryUserDetailsManager inMemoryUserDetailsManager() {
+//        User.UserBuilder users = User.withDefaultPasswordEncoder();
+//        UserDetails user = users
+//                .username("user")
+//                .password("12345")
+//                .roles("USER")
+//                .build();
+//        UserDetails admin = users
+//                .username("admin")
+//                .password("12345")
+//                .roles("USER", "ADMIN")
+//                .build();
+//        return new InMemoryUserDetailsManager(user, admin);
+//    }
 
 }

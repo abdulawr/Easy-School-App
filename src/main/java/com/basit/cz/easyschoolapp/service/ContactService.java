@@ -21,13 +21,13 @@ public class ContactService {
     ContactRepository contactRepository;
 
     public boolean saveMessageDetails(Contact contact) {
-        contact.setStatus(SchoolConstant.Open);
+        contact.setStatus(SchoolConstant.OPEN);
         Contact newContact =  contactRepository.save(contact);
         return newContact.getContactId() > 0;
     }
 
     public List<Contact> findMsgsWithOpenStatus(){
-        List<Contact> contactMsgs = contactRepository.findByStatus(SchoolConstant.Open);
+        List<Contact> contactMsgs = contactRepository.findByStatus(SchoolConstant.OPEN);
         return contactMsgs;
     }
 
@@ -35,7 +35,7 @@ public class ContactService {
         boolean isUpdated = false;
         Optional<Contact> contact = contactRepository.findById(contactId);
         contact.ifPresent(contact1 -> {
-            contact1.setStatus(SchoolConstant.Close);
+            contact1.setStatus(SchoolConstant.CLOSE);
         });
         Contact updatedContact = contactRepository.save(contact.get());
         if(null != updatedContact && updatedContact.getUpdatedBy()!=null) {

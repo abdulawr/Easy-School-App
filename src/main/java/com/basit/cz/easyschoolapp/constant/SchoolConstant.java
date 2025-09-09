@@ -1,10 +1,8 @@
 package com.basit.cz.easyschoolapp.constant;
 
 public interface SchoolConstant {
-    String Anonymous = "Anonymous";
-    String Open = "Open";
-    String Close = "Close";
-    String STUDENT_ROLE = "STUDENT";
-    String ADMIN_ROLE = "ADMIN";
-    String USER_ROLE = "USER";
+    public static final String OPEN = "Open";
+    public static final String CLOSE = "Close";
+    public static final String STUDENT_ROLE = "STUDENT";
+    public static final String ADMIN_ROLE = "ADMIN";
 }
