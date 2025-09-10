@@ -25,7 +25,8 @@ public class WebSecurityConfig {
     public SecurityFilterChain web(HttpSecurity http) throws Exception {
 
         http.csrf((csrf) -> csrf.ignoringRequestMatchers("/saveMsg").ignoringRequestMatchers("/public/**"))
-                .authorizeHttpRequests((requests) -> requests.requestMatchers("/dashboard").authenticated()
+                .authorizeHttpRequests((requests) ->
+                        requests.requestMatchers("/dashboard").authenticated()
                         .requestMatchers("/displayMessages").hasRole("ADMIN")
                         .requestMatchers("/closeMsg/**").hasRole("ADMIN")
                         .requestMatchers("/", "/home").permitAll()
@@ -38,7 +39,8 @@ public class WebSecurityConfig {
                         .requestMatchers("/login").permitAll()
                         .requestMatchers("/logout").permitAll()
                         .requestMatchers("/displayProfile").permitAll()
-                        .requestMatchers("/public/**").permitAll())
+                        .requestMatchers("/public/**").permitAll()
+                        .requestMatchers("/updateProfile").authenticated())
                         .authenticationProvider(customUsernameAndPwdAuth)
                 .formLogin(loginConfigurer -> loginConfigurer.loginPage("/login")
                         .defaultSuccessUrl("/dashboard").failureUrl("/login?error=true").permitAll())

@@ -3,6 +3,7 @@ package com.basit.cz.easyschoolapp.security;
 import com.basit.cz.easyschoolapp.model.Person;
 import com.basit.cz.easyschoolapp.model.Roles;
 import com.basit.cz.easyschoolapp.repository.PersonRepository;
+import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -34,7 +35,7 @@ public class CustomUsernameAndPwdAuth implements AuthenticationProvider {
 
         if (person != null && person.getPersonId() > 0 && encoder.matches(password,person.getPwd())){
             return new UsernamePasswordAuthenticationToken(
-                    person.getName(), password, getGrantedAuthorities(person.getRoles()));
+                    person.getEmail(), password, getGrantedAuthorities(person.getRoles()));
         }
 
         throw new BadCredentialsException("Invalid username or password");
