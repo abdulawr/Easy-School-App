@@ -20,10 +20,12 @@ public class WebSecurityConfig {
 
         http.csrf((csrf) ->
                         csrf.ignoringRequestMatchers("/saveMsg").
-                                ignoringRequestMatchers("/public/**"))
+                                ignoringRequestMatchers("/public/**")
+                                .ignoringRequestMatchers("/api/**")
+                )
                 .authorizeHttpRequests((requests) ->
                         requests.requestMatchers("/dashboard").authenticated()
-                        .requestMatchers("/displayMessages").hasRole("ADMIN")
+                        .requestMatchers("/displayMessages/**").hasRole("ADMIN")
                         .requestMatchers("/admin/**").hasRole("ADMIN")
                         .requestMatchers("/closeMsg/**").hasRole("ADMIN")
                         .requestMatchers("/", "/home").permitAll()
@@ -37,7 +39,9 @@ public class WebSecurityConfig {
                         .requestMatchers("/logout").permitAll()
                         .requestMatchers("/displayProfile").permitAll()
                         .requestMatchers("/public/**").permitAll()
-                        .requestMatchers("/updateProfile").authenticated())
+                        .requestMatchers("/updateProfile").authenticated()
+                        .requestMatchers("/api/**").authenticated()
+                )
                         .authenticationProvider(customUsernameAndPwdAuth)
                 .formLogin(loginConfigurer -> loginConfigurer.loginPage("/login")
                         .defaultSuccessUrl("/dashboard").failureUrl("/login?error=true").permitAll())
